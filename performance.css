@@ -1,0 +1,14 @@
+/* Full HD stays on the browser's video compositor, never a large 2D canvas. */
+.scroll-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;pointer-events:none}
+.hero.has-frame .scroll-video,.essence-film.has-frame .scroll-video{opacity:1}
+.film-canvas[data-renderer=video],.essence-canvas[data-renderer=video]{display:none}
+.constellation-bottle{filter:drop-shadow(0 14px 22px #0008)}
+.scene-mineral .origin-sculpture{left:39%;width:56%;top:5%;bottom:auto;height:84%;align-self:auto;pointer-events:none}
+.mineral-stage{position:absolute;left:50%;top:50%;translate:-50% -50%;width:min(76vh,100%);aspect-ratio:1;isolation:isolate}
+.mineral-half{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform-origin:50% 55%}
+.mineral-left{clip-path:inset(0 49% 0 0)}
+.mineral-right{clip-path:inset(0 0 0 51%)}
+.mineral-light{position:absolute;inset:9% 24% 5%;background:radial-gradient(ellipse,#e9b36342,transparent 68%);opacity:.65;pointer-events:none}
+@media(max-width:760px){.scene-mineral .origin-sculpture,.is-horizontal .scene-mineral .origin-sculpture{left:2%;width:96%;top:11%;height:55%}.mineral-stage{width:min(49svh,96%)}.scene-mineral .gallery-copy{left:7vw;right:5vw;bottom:10vh}.scene-mineral .gallery-title{font-size:clamp(32px,11vw,58px)}.scene-mineral .gallery-title em{font-size:1.08em;white-space:nowrap}}
+@media(max-height:579px) and (min-width:761px){.scene-mineral .origin-sculpture,.is-horizontal .scene-mineral .origin-sculpture{top:6%;left:43%;width:54%;height:78%}.scene-mineral .gallery-copy{left:6vw;right:auto;bottom:50px}.scene-mineral .gallery-title{font-size:5vw}}
+@media(max-width:760px){.is-cinematic .gallery-veil{backdrop-filter:blur(min(var(--veil-blur,2px),14px))}.constellation-bottle{filter:drop-shadow(0 8px 13px #0007)}}

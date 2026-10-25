@@ -1,8 +1,8 @@
-import {createFramePlayer} from './frame-player.js';
+import {createScrollVideo} from './scroll-video.js';
 import {initShop} from './shop.js';
 import {initInteractions} from './interactions.js';
 import {createSmoothScroll} from './smooth-scroll.js';
-import {initVisualScenes} from './visual-scenes.js';
+import {createMineralReveal} from './mineral-reveal.js';
 import {storyState,storyTimeForPanel,STORY_DURATION} from './story-progress.js';
 import {initLiquidReflection} from './liquid-reflection.js';
 import {createConstellation} from './constellation.js';
@@ -33,7 +33,7 @@ document.addEventListener('pointerdown',event=>{if(!event.target.closest('.herit
 const shop=initShop({isCalm:()=>calm||!hasGSAP});
 const interactions=initInteractions({isCalm:()=>calm||!hasGSAP});
 const smooth=createSmoothScroll({isCalm:()=>calm||!hasGSAP});
-const visuals=initVisualScenes({isCalm:()=>calm});
+const mineral=createMineralReveal(document.querySelector('.mineral-stage'));
 const erosionValues=offset=>`0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 8 0 0 0 ${offset}`;
 
 async function configureAnimations(){
@@ -50,7 +50,7 @@ async function configureAnimations(){
  root.dataset.motion=calm?'calm':'full';
  document.querySelector('.film-poster').src=calm?'assets/final.webp':'assets/poster.webp';
  essence.querySelector('.essence-poster').src=calm?'assets/essence/final.webp':'assets/essence/poster.webp';
- visuals.reset();
+ mineral.render(1,0);
  if(calm||!hasGSAP){constellation.render(1);restorePanelFocus();smooth.resize();return;}
  const mobile=mobileQuery.matches;
  let manifest={startFrame:24,endFrame:191},essenceManifest={startFrame:0,endFrame:191};
@@ -58,7 +58,7 @@ async function configureAnimations(){
  if(manifests[0].status==='fulfilled')manifest=manifests[0].value;
  if(manifests[1].status==='fulfilled')essenceManifest=manifests[1].value;
  if(current!==revision||calm)return;
- player=createFramePlayer({canvas:document.querySelector('.film-canvas'),first:manifest.startFrame,last:manifest.endFrame,mobile,
+ player=createScrollVideo({canvas:document.querySelector('.film-canvas'),source:'assets/video/reveal-1080p.mp4',first:manifest.startFrame,last:manifest.endFrame,mobile,
   onReady:()=>{hero.classList.add('has-frame');document.querySelector('.frame-status').textContent='';},
   onError:()=>{document.querySelector('.frame-status').textContent='Доступен статичный просмотр.';}
  });
@@ -66,7 +66,7 @@ async function configureAnimations(){
  const essenceFocus=progress=>{const points=[[0,.66],[.22,.65],[.45,.55],[.66,.43],[.84,.43],[1,.5]];const i=points.findIndex(point=>point[0]>=progress);if(i<=0)return points[0][1];const a=points[i-1],b=points[i];return a[1]+(b[1]-a[1])*(progress-a[0])/(b[0]-a[0]);};
  const prepareEssence=()=>{
   if(current!==revision||calm||essencePlayer)return;
-  essencePlayer=createFramePlayer({canvas:essence.querySelector('canvas'),first:essenceManifest.startFrame,last:essenceManifest.endFrame,mobile,basePath:'assets/essence',cacheLimit:mobile?12:20,focusX:mobile?essenceFocus:.5,onReady:()=>essence.classList.add('has-frame')});
+  essencePlayer=createScrollVideo({canvas:essence.querySelector('canvas'),source:'assets/video/essence-1080p.mp4',first:essenceManifest.startFrame,last:essenceManifest.endFrame,mobile,basePath:'assets/essence',cacheLimit:mobile?12:20,focusX:mobile?essenceFocus:.5,onReady:()=>essence.classList.add('has-frame')});
   essencePlayer.setProgress(essenceProgress.value);
  };
  essenceObserver=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting))prepareEssence();},{rootMargin:'100% 0px'});essenceObserver.observe(essence);
@@ -91,25 +91,30 @@ async function configureAnimations(){
   const setRise=gsap.quickSetter(heritage,'yPercent');
   const setTrack=gsap.quickSetter(track,'x','px');
   const words=creationBeats.map(beat=>[...beat.querySelectorAll('.creation-word')]);
+  const wordStates=words.map(list=>list.map(()=>-1));
   const clamp=value=>Math.max(0,Math.min(1,value));
+  let panelDistance=0,lastFilm=-1,lastHorizontal=-1,lastReveal=-1,lastBlur=-1,lastDark=-1;
+  function measureStage(){cinematic.style.setProperty('--scene-width',`${cinematic.clientWidth}px`);panelDistance=Math.max(0,panels.at(-1).offsetLeft-panels[0].offsetLeft);}
+  measureStage();
   function renderStory(){
    const state=storyState(phase.time);
-   cinematic.style.setProperty('--scene-width',`${cinematic.clientWidth}px`);
-   essenceProgress.value=state.film;essencePlayer?.setProgress(state.film);
-   setRise(105*(1-state.reveal));
-   setTrack(-Math.max(0,panels.at(-1).offsetLeft-panels[0].offsetLeft)*state.horizontal);
-   cinematic.style.setProperty('--veil-blur',`${2+state.blur*26}px`);
-   cinematic.style.setProperty('--veil-shade',String(.18+state.blur*.72));
-   cinematic.style.setProperty('--film-dim',String(state.dark));
+   if(state.reveal!==lastReveal){setRise(105*(1-state.reveal));lastReveal=state.reveal;}
+   if(state.blur!==lastBlur){cinematic.style.setProperty('--veil-blur',`${2+state.blur*26}px`);cinematic.style.setProperty('--veil-shade',String(.18+state.blur*.72));lastBlur=state.blur;}
+   if(state.dark!==lastDark){cinematic.style.setProperty('--film-dim',String(state.dark));lastDark=state.dark;}
    cinematic.dataset.film=state.film.toFixed(4);cinematic.dataset.reveal=state.reveal.toFixed(4);cinematic.dataset.horizontal=state.horizontal.toFixed(4);cinematic.dataset.orbit=state.orbit.toFixed(4);
-   // Two short fictional chapters occupy the left negative space, then clear
-   // before the bottle travels across that area of the frame.
+   // Fictional chapters clear before the bottle crosses their negative space.
+   if(state.film!==lastFilm){
+   essenceProgress.value=state.film;essencePlayer?.setProgress(state.film);lastFilm=state.film;
    creationBeats.forEach((beat,index)=>{
     const start=[.08,.27,.49][index],end=[.25,.46,.76][index];
     const reveal=clamp((state.film-start)/.085),out=clamp((end-state.film)/.035);
     beat.style.opacity=String(out);beat.style.visibility=state.film>=start-.02&&state.film<=end?'visible':'hidden';
-    words[index].forEach((word,i)=>{const v=clamp(reveal*1.5-i/words[index].length*.5);word.style.opacity=String(v);word.style.transform=`translateY(${(1-v)*12}px)`;word.style.filter=`blur(${(1-v)*5}px)`;});
+    if(beat.style.visibility==='hidden')return;
+    words[index].forEach((word,i)=>{const v=clamp(reveal*1.5-i/words[index].length*.5);if(wordStates[index][i]===v)return;wordStates[index][i]=v;word.style.opacity=String(v);word.style.transform=`translateY(${(1-v)*12}px)`;word.style.filter=v===1?'none':`blur(${(1-v)*5}px)`;});
    });
+   }
+   if(state.horizontal!==lastHorizontal){
+   lastHorizontal=state.horizontal;setTrack(-panelDistance*state.horizontal);
    panels.forEach((panel,index)=>{
     const position=state.horizontal*(panels.length-1)-index;
     const exposure=clamp(1.5+position)*clamp(1-Math.max(0,position-.25)/.65);
@@ -119,9 +124,11 @@ async function configureAnimations(){
     const title=panel.querySelector('.gallery-copy');
     if(index!==panels.length-1){title.style.transform=`translateY(${Math.max(0,-position)*24}px)`;title.style.opacity=String(exposure);}
    });
+   }
+   mineral.render(state.reveal,state.horizontal);
    constellation.render(state.orbit);
   }
-  gsap.to(phase,{time:STORY_DURATION,ease:'none',onUpdate:renderStory,scrollTrigger:{id:'obsidian-cinematic',trigger:cinematic,start:'top top',end:()=>'+='+Math.round(innerHeight*STORY_DURATION),pin:true,scrub:.7,anticipatePin:1,invalidateOnRefresh:true,onRefresh:()=>{renderStory();if(lastGalleryFocus)requestAnimationFrame(()=>{restorePanelFocus();alignFocusedPanel();});}}});
+  gsap.to(phase,{time:STORY_DURATION,ease:'none',onUpdate:renderStory,scrollTrigger:{id:'obsidian-cinematic',trigger:cinematic,start:'top top',end:()=>'+='+Math.round(innerHeight*STORY_DURATION),pin:true,scrub:.7,anticipatePin:1,invalidateOnRefresh:true,onRefresh:()=>{measureStage();lastHorizontal=-1;renderStory();if(lastGalleryFocus)requestAnimationFrame(()=>{restorePanelFocus();alignFocusedPanel();});}}});
   renderStory();
  });
  ScrollTrigger.refresh();smooth.resize();restorePanelFocus();alignFocusedPanel();
@@ -171,5 +178,5 @@ function alignFocusedPanel(){
 }
 heritage.addEventListener('focusin',alignFocusedPanel);
 document.fonts?.ready.then(()=>{if(hasGSAP)ScrollTrigger.refresh();smooth.resize();});
-addEventListener('pagehide',event=>{if(event.persisted)return;revision++;player?.destroy();essencePlayer?.destroy();essenceObserver?.disconnect();animationContext?.revert();smooth.destroy();visuals.destroy();constellation.destroy();});
+addEventListener('pagehide',event=>{if(event.persisted)return;revision++;player?.destroy();essencePlayer?.destroy();essenceObserver?.disconnect();animationContext?.revert();smooth.destroy();constellation.destroy();});
 addEventListener('pageshow',event=>{if(event.persisted){updateHeader();if(hasGSAP)ScrollTrigger.refresh();}});

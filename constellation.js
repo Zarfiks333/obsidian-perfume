@@ -35,23 +35,24 @@ export function createConstellation(panel){
  const field=panel.querySelector('.constellation-field');
  const bottles=[...field.querySelectorAll('.constellation-bottle')];
  const copy=panel.querySelector('.gallery-copy');
- let lastProgress=1;
- function render(progress){
+ let lastProgress=1,lastRendered=-1,width=0,height=0,baseHeight=1;
+ function render(progress,force=false){
   lastProgress=progress;
-  const state=constellationState(progress,field.clientWidth,field.clientHeight);
+  if(!force&&progress===lastRendered)return;
+  lastRendered=progress;
+  const state=constellationState(progress,width,height);
   bottles.forEach((bottle,i)=>{
    const pose=state.bottles[i];
-   bottle.style.height=`${pose.height}px`;
-   bottle.style.transform=`translate3d(${pose.x}px,${pose.y}px,0) translate(-50%,-50%) rotate(${pose.rotation}deg) rotateY(${pose.turn}deg)`;
+   bottle.style.transform=`translate3d(${pose.x}px,${pose.y}px,0) translate(-50%,-50%) rotate(${pose.rotation}deg) rotateY(${pose.turn}deg) scale(${pose.height/baseHeight})`;
    bottle.style.opacity=String(pose.opacity);
    bottle.style.zIndex=String(pose.layer);
-   bottle.style.filter=`brightness(${pose.brightness}) drop-shadow(0 18px 26px #0008)`;
   });
   field.style.setProperty('--sphere-glow',state.glow);
   field.style.setProperty('--sphere-scale',1+state.camera*.045);
   copy.style.opacity=String(state.title);
   panel.dataset.orbit=String(progress);
  }
- const observer=new ResizeObserver(()=>render(lastProgress));observer.observe(field);
+ function resize(){width=field.clientWidth;height=field.clientHeight;baseHeight=Math.max(1,Math.min(height*.22,width*.24));bottles.forEach(bottle=>bottle.style.height=`${baseHeight}px`);render(lastProgress,true);}
+ const observer=new ResizeObserver(resize);observer.observe(field);resize();
  return {render,destroy:()=>observer.disconnect()};
 }
