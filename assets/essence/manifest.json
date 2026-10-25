@@ -1,0 +1,10 @@
+{
+  "duration": 8,
+  "width": 1920,
+  "height": 1080,
+  "fps": 24,
+  "count": 192,
+  "startFrame": 0,
+  "endFrame": 191,
+  "scrollScreens": 6
+}

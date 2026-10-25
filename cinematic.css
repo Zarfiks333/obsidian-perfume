@@ -1,0 +1,70 @@
+/* One continuous film/gallery stage. The film remains underneath the cloth. */
+.catalog-liquid{position:relative;height:78svh;min-height:480px;margin-top:-78svh;pointer-events:none;z-index:0;isolation:isolate}
+.liquid-generated{position:absolute;inset:0;background:url('assets/collection/liquid-bridge-v7.webp') center bottom/100% 100% no-repeat;mask-image:linear-gradient(transparent,#000 29%,#000 82%,transparent);opacity:.83}
+.liquid-reflection{position:absolute;bottom:-1px;left:0;width:100%;height:20svh;max-height:220px;mask-image:linear-gradient(transparent,#000 65%);pointer-events:none}
+.catalog:after{display:none}.catalog{padding-bottom:210px}
+.cinematic-story{position:relative;isolation:isolate}
+.cinematic-story.is-cinematic{height:100svh;min-height:0;overflow:clip}
+.is-cinematic .essence-film{position:absolute;inset:0;height:100%;min-height:0;background:#100e0b}
+.essence-media{mask-image:none}
+.creation-story{position:relative;padding:100px 6vw 50px;background:linear-gradient(transparent,#100e0b 25%);z-index:2}
+.creation-beat{font:400 clamp(32px,3.1vw,58px)/1.24 var(--serif);letter-spacing:-.035em;color:#e8decb;max-width:620px;margin-bottom:35px}
+.creation-beat em{color:#caae81;font-family:var(--brand);font-weight:400}
+.creation-word{display:inline-block;will-change:opacity,transform,filter}
+.is-cinematic .creation-story{position:absolute;left:6vw;top:35%;width:34vw;max-width:580px;padding:0;background:none;pointer-events:none}
+.is-cinematic .creation-beat{position:absolute;inset:0 auto auto 0;width:100%;opacity:0;visibility:hidden;margin:0;text-shadow:0 2px 28px #0009}
+.is-cinematic .heritage.is-horizontal{position:absolute;inset:0;height:100%;min-height:0;background:transparent;overflow:visible;isolation:auto;z-index:3;will-change:transform}
+.is-cinematic .heritage:before{display:none}
+.gallery-veil{display:none;pointer-events:none}
+.is-cinematic .gallery-veil{display:block;position:absolute;inset:-18svh 0 -2px;backdrop-filter:blur(var(--veil-blur,2px));background:linear-gradient(transparent,rgba(12,11,9,.1) 24%,rgba(12,11,9,var(--veil-shade,.18)) 88%);mask-image:linear-gradient(transparent 0%,rgba(0,0,0,.06) 6%,rgba(0,0,0,.25) 12%,rgba(0,0,0,.62) 21%,#000 34%);z-index:0}
+.is-cinematic .gallery-track{position:relative;z-index:1;height:100%;background:transparent}
+.is-cinematic .heritage-panel{width:var(--scene-width,100vw)}
+.is-cinematic .gallery-scene{background:transparent;overflow:visible;min-height:0}
+.origin-sculpture{mask-image:none}.gallery-texture{display:none}
+.scene-mineral .origin-sculpture{left:31%;width:69%;right:0}
+.scene-object:before{display:none}
+.footer-scents{grid-template-columns:repeat(2,max-content);column-gap:28px}
+html[data-motion=calm] .creation-word{will-change:auto}
+@media(max-width:1050px){.footer-scents{column-gap:25px}.is-cinematic .creation-story{width:37vw}.creation-beat{font-size:3.7vw}}
+@media(max-width:760px){
+ .catalog{padding-bottom:100px}.catalog-liquid{height:58svh;min-height:0;margin-top:-58svh}.liquid-generated{background-size:auto 100%;background-position:20% bottom;opacity:.7}.liquid-reflection{height:12svh;opacity:.6}
+ .is-cinematic .essence-media{inset:0;mask-image:none}
+ .is-cinematic .creation-story{left:7vw;top:auto;bottom:8%;height:150px;width:85%;max-width:none}
+ .is-cinematic .creation-beat{text-shadow:0 2px 8px #000,0 4px 25px #000,0 0 50px #000}
+ .creation-story{padding:55px 7vw 30px}.creation-beat{font-size:clamp(25px,6.4vw,38px);line-height:1.28;max-width:none}
+ .is-cinematic .gallery-veil{inset:-14svh 0 -2px}
+ .scene-mineral .origin-sculpture,.is-horizontal .scene-mineral .origin-sculpture{left:0;width:100%;height:68%;top:3%}
+ .footer-scents{column-gap:26px}
+}
+@media(max-height:579px) and (min-width:761px){.is-cinematic .creation-story{top:27%;width:35vw}.creation-beat{font-size:clamp(25px,3.3vw,42px)}.is-cinematic .gallery-copy{bottom:8vh}.is-cinematic .gallery-title{font-size:5.5vw}}
+
+/* v8: the camera travels through nine perfumes, then lets them form a circle. */
+.is-cinematic .essence-media:after{content:'';position:absolute;inset:0;background:#0c0b09;opacity:var(--film-dim,0);pointer-events:none}
+.is-cinematic .creation-story{width:auto;max-width:none;inset:0;left:0;top:0;height:100%}
+.is-cinematic .creation-beat{left:6vw;top:35%;width:34vw;max-width:580px}
+.is-cinematic .creation-right{left:auto;right:6vw;top:54%;width:27vw;font-size:clamp(28px,2.5vw,46px)}
+.heritage .scene-spectrum{height:100svh;min-height:0}
+.constellation-field{position:absolute;inset:0;pointer-events:none;overflow:hidden;perspective:1200px}
+.constellation-sphere{position:absolute;left:50%;top:50%;width:48vmin;height:48vmin;border-radius:50%;background:radial-gradient(ellipse,#a3763533,rgba(93,62,26,.07) 40%,transparent 70%);filter:blur(28px);opacity:var(--sphere-glow,.6);transform:translate(-50%,-50%) scale(var(--sphere-scale,1))}
+.constellation-bottle{position:absolute;left:50%;top:50%;height:20vh;width:auto;max-width:none;object-fit:contain;aspect-ratio:5/6;will-change:transform,opacity;backface-visibility:hidden}
+.scene-spectrum .gallery-copy,.is-cinematic .scene-spectrum .gallery-copy{left:50%;top:50%;bottom:auto;right:auto;width:30vw;max-width:350px;text-align:center;transform:translate(-50%,-50%);z-index:150}
+.scene-spectrum .gallery-title,.is-cinematic .scene-spectrum .gallery-title{font-size:clamp(28px,3vw,52px);line-height:1.2;letter-spacing:-.045em}
+.scene-spectrum .gallery-link{margin:15px auto 0;max-width:190px;font-size:10px;gap:22px;padding:10px 0}
+.site-footer{background:#0c0b09;isolation:isolate}
+.site-footer:before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:url('assets/collection/landscape.webp') center 45%/cover no-repeat;opacity:.65;mask-image:linear-gradient(transparent 0%,rgba(0,0,0,.15) 18%,#000 52%)}
+html[data-motion=calm] .constellation-bottle{will-change:auto}
+@media(max-width:760px){
+ .is-cinematic .creation-story{left:0;top:0;bottom:auto;width:100%;height:100%}
+ .is-cinematic .creation-beat,.is-cinematic .creation-right{left:7vw;right:auto;top:auto;bottom:8%;width:85%;max-width:none;font-size:clamp(25px,6.4vw,38px)}
+ .is-cinematic .creation-right{font-size:clamp(23px,5.8vw,34px)}
+ .scene-spectrum .gallery-copy,.is-cinematic .scene-spectrum .gallery-copy{width:42vw;max-width:180px;bottom:auto}
+ .scene-spectrum .gallery-title,.is-cinematic .scene-spectrum .gallery-title{font-size:clamp(20px,5.4vw,36px)}
+ .scene-spectrum .gallery-link{font-size:8px;gap:10px;max-width:140px;margin-top:12px}
+}
+@media(max-height:579px) and (min-width:761px){
+ .constellation-field{inset:65px 0 0}
+ .scene-spectrum .gallery-title,.is-cinematic .scene-spectrum .gallery-title{font-size:clamp(21px,6vh,34px)}
+ .scene-spectrum .gallery-copy,.is-cinematic .scene-spectrum .gallery-copy{top:calc(50% + 32.5px);width:26vw;max-width:180px}
+ .scene-spectrum .gallery-link{font-size:8px;max-width:145px;margin-top:8px}
+ .is-cinematic .creation-right{top:40%;font-size:clamp(21px,2.4vw,30px)}
+}

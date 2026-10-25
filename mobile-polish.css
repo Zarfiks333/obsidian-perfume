@@ -1,0 +1,47 @@
+/* The dimmer shares the grid's stacking context with the selected card. */
+.product-grid>.hover-dimmer{z-index:40}
+.product-card.is-spotlit{z-index:45}
+.menu-dialog{isolation:isolate;background:radial-gradient(ellipse at 85% 5%,#503019,#1c140e 42%,#100e0b 78%);overflow:hidden}
+.menu-dialog:before{content:'';position:absolute;inset:0;z-index:-1;background:url('assets/collection/liquid-bridge-v7.webp') 65% 50%/auto 110% no-repeat;opacity:.13;mask-image:linear-gradient(transparent,#000 45%,transparent);pointer-events:none}
+.menu-dialog::backdrop{background:#0005;backdrop-filter:none}
+.menu-dialog .dialog-close{display:grid;place-items:center;width:44px;height:44px;padding:10px}
+.site-footer:after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:url('assets/collection/landscape.webp') center 45%/cover no-repeat;mix-blend-mode:screen;filter:brightness(1.35) sepia(.5) saturate(1.7) blur(1px);mask-image:radial-gradient(ellipse at 70% 65%,#000,transparent 65%);opacity:.08;animation:vein-light 7s ease-in-out infinite;animation-play-state:paused}
+.site-footer.is-lit:after{animation-play-state:running}
+@keyframes vein-light{0%,100%{opacity:.04}45%{opacity:.46}65%{opacity:.12}78%{opacity:.26}}
+html[data-motion=calm] .site-footer:after{animation:none;opacity:.08}
+@media(max-width:760px){
+ html{scrollbar-gutter:auto}
+ html,body,dialog{scrollbar-width:none}
+ html::-webkit-scrollbar,body::-webkit-scrollbar,dialog::-webkit-scrollbar{display:none;width:0;height:0}
+ .product-dialog .dialog-top{position:sticky;top:0;z-index:6;backdrop-filter:none;background:linear-gradient(#0c0b09ed,#0c0b0900);padding:18px 6vw}
+ .product-dialog .product-scene{position:relative;top:auto;z-index:3;height:36svh;min-height:245px;backdrop-filter:none;background:none;mask-image:none;overflow:visible}
+ .product-dialog .bottle-morph{width:min(58vw,26svh,280px);height:auto;aspect-ratio:5/6}
+ .product-dialog .product-information{padding:24px 7vw 35px}
+ .product-dialog .product-information h2{font-size:clamp(64px,16vw,88px)}
+ .product-dialog .product-description{line-height:1.85}
+ .product-dialog .scene-caption{bottom:12px}
+ .footer-commerce{grid-template-columns:1fr 1fr;gap:32px 22px}
+ .footer-shop{display:grid;grid-template-columns:1fr 1fr;align-items:start;gap:12px;grid-column:1/-1}
+ .footer-shop>p{grid-column:1/-1;margin:0}
+ .footer-shop .footer-column-title{margin-bottom:3px}
+ .footer-shop>p:last-child{margin:4px 0 0;font-size:11px;line-height:1.8}
+ .footer-shop .footer-pill,.footer-shop .footer-outline{display:flex;width:100%;max-width:none;min-height:52px;height:100%;margin:0;padding:14px 16px;justify-content:center;text-align:center;gap:12px;font-size:11px}
+ .footer-scents{grid-column:1;grid-row:2;grid-template-columns:repeat(2,max-content);column-gap:22px;row-gap:12px}
+ .footer-column[aria-label="О доме OBSIDIAN"]{grid-column:2;grid-row:2}
+ .footer-column[aria-label="Информация покупателю"]{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;column-gap:22px;row-gap:12px}
+ .footer-column[aria-label="Информация покупателю"] .footer-column-title{grid-column:1/-1}
+ .footer-column-title{margin:0 0 8px}
+ .footer-column>a,.footer-column>button{font-size:11px;line-height:1.55}
+}
+@media(orientation:landscape) and (max-width:950px) and (max-height:579px){
+ html{scrollbar-gutter:auto}html,body,dialog{scrollbar-width:none}
+ html::-webkit-scrollbar,body::-webkit-scrollbar,dialog::-webkit-scrollbar{display:none;width:0;height:0}
+ .product-dialog .dialog-top{position:sticky;top:0;z-index:6;height:68px;padding:12px 4vw;backdrop-filter:none;background:linear-gradient(#0c0b09ed,#0c0b0900)}
+ .product-dialog .product-layout{display:grid;grid-template-columns:1fr 1.12fr;min-height:0}
+ .product-dialog .product-scene{position:sticky;align-self:start;top:68px;height:calc(100svh - 68px);min-height:0;backdrop-filter:none;background:none;mask-image:none;overflow:visible}
+ .product-dialog .bottle-morph{width:min(28vw,44svh);height:auto;aspect-ratio:5/6}
+ .product-dialog .product-information{padding:8px 4vw 30px 0}
+ .product-dialog .product-information h2{font-size:56px}
+ .product-dialog .product-description{font-size:11px;line-height:1.8}
+ .product-dialog .scene-caption{bottom:9px}
+}
